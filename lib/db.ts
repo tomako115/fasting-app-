@@ -1,3 +1,5 @@
+import { getRequestContext } from '@cloudflare/next-on-pages';
+
 export interface Client {
   id: number;
   name: string;
@@ -15,5 +17,5 @@ export interface MessageCheck {
 }
 
 export function getDB(): D1Database {
-  return (globalThis as unknown as { DB: D1Database }).DB;
+  return getRequestContext().env.DB;
 }
