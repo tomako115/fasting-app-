@@ -29,7 +29,7 @@ function CopyButton({ text }: { text: string }) {
 
 function MessageCard({
   msg,
-  clientId,
+  clientId: _clientId,
   checked,
   onToggle,
 }: {
