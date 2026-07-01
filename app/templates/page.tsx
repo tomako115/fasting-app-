@@ -1,8 +1,10 @@
 'use client';
 import { useState } from 'react';
-import { TEMPLATES } from '@/lib/templates';
+import { TEMPLATES, PETIT_KNOWLEDGE } from '@/lib/templates';
 
-function TemplateCard({ template }: { template: typeof TEMPLATES[0] }) {
+type AnyTemplate = { key: string; title: string; emoji: string; body: string };
+
+function TemplateCard({ template }: { template: AnyTemplate }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -42,8 +44,11 @@ function TemplateCard({ template }: { template: typeof TEMPLATES[0] }) {
 }
 
 export default function TemplatesPage() {
+  const [tab, setTab] = useState<'templates' | 'knowledge'>('templates');
   const [search, setSearch] = useState('');
-  const filtered = TEMPLATES.filter((t) =>
+
+  const list: AnyTemplate[] = tab === 'templates' ? TEMPLATES : PETIT_KNOWLEDGE;
+  const filtered = list.filter((t) =>
     t.title.includes(search) || t.body.includes(search)
   );
 
@@ -51,11 +56,26 @@ export default function TemplatesPage() {
     <div className="p-4">
       <h1 className="text-xl font-bold text-gray-800 mb-4">📋 テンプレート</h1>
 
+      <div className="flex gap-2 mb-4">
+        <button
+          onClick={() => setTab('templates')}
+          className={`flex-1 py-2 rounded-xl text-sm font-medium ${tab === 'templates' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-600'}`}
+        >
+          📨 送信テンプレート
+        </button>
+        <button
+          onClick={() => setTab('knowledge')}
+          className={`flex-1 py-2 rounded-xl text-sm font-medium ${tab === 'knowledge' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-600'}`}
+        >
+          💡 プチ知識
+        </button>
+      </div>
+
       <input
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="🔍 テンプレートを検索..."
+        placeholder="🔍 検索..."
         className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-green-400"
       />
 
